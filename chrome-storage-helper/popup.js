@@ -77,7 +77,7 @@ const dom = {
 		const checkbox = this.createCheckbox({ checked })
 		const span = this.create('span', { innerText: label })
 
-		div.onclick = () => {
+		div.onclick = (e) => {
 			checkbox.checked = !checkbox.checked
 			if (checkbox.checked) {
 				callBack?.onChoose?.()
