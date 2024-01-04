@@ -1,8 +1,9 @@
-import { Button, Checkbox, Space } from 'antd';
+import { Button, Checkbox, message, Space } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import ObjectBlock from '@/components/ObjectBlock';
-import { mainLocalStorage, chromeLocalStorage } from '@/proxy';
-import { pick } from '@/utils';
+import { mainLocalStorage, chromeLocalStorage, mainLocation } from '@/proxy';
+import { copyToClipboard, pick } from '@/utils';
+import { generateAcrossDeviceUrl } from '@/data';
 
 export default function () {
   const [localData, setLocalData] = useState<any>({});
@@ -28,6 +29,17 @@ export default function () {
       chromeLocalStorage.get().then((localStorage) => {
         setLocalData(localStorage);
         setLocalSelectKeys(Object.keys(localStorage));
+      });
+    });
+  }
+
+  // 生成跨设备链接
+  function genAcrossDeviceUrl() {
+    mainLocation.get().then(({ data: _mainLocation }) => {
+      // 压缩到2000个字符串长度
+      const url = generateAcrossDeviceUrl(_mainLocation.href, pageData);
+      copyToClipboard(url).then(() => {
+        message.success('复制成功');
       });
     });
   }
@@ -72,14 +84,17 @@ export default function () {
 
   return (
     <div style={{ width: 450, padding: '12px 16px' }}>
-      <Space size={16} style={{ marginBottom: 16 }}>
-        <Button type={'primary'} onClick={switchCache}>
-          切换
-        </Button>
-        <Button type={'primary'} onClick={saveCache}>
-          保存
-        </Button>
-      </Space>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Space size={16} style={{ marginBottom: 16 }}>
+          <Button type={'primary'} onClick={switchCache}>
+            切换
+          </Button>
+          <Button type={'primary'} onClick={saveCache}>
+            保存
+          </Button>
+        </Space>
+        <Button onClick={genAcrossDeviceUrl}>复制跨设备链接</Button>
+      </div>
       <Space style={{ width: '100%' }} direction={'vertical'}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span style={{ color: 'rgb(197, 197, 197)', fontSize: 12 }}>暂存 localStorage</span>
@@ -93,7 +108,7 @@ export default function () {
           </Space>
         </div>
         <ObjectBlock
-          style={{ height: 130, border: '1px solid #e8e8e8', overflowY: 'auto' }}
+          style={{ height: 155, border: '1px solid #e8e8e8', overflowY: 'auto' }}
           data={localData}
           selectable
           selectKeys={localSelectKeys}
@@ -106,7 +121,7 @@ export default function () {
           </Space>
         </div>
         <ObjectBlock
-          style={{ height: 130, border: '1px solid #e8e8e8', overflowY: 'auto' }}
+          style={{ height: 155, border: '1px solid #e8e8e8', overflowY: 'auto' }}
           data={pageData}
         />
       </Space>

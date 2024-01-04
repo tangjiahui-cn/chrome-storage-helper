@@ -5,8 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dc995ae9-55b3-4ba0-8ed1-6731560b3376" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/data/parser.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrome.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/chrome.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ObjectBlock/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ObjectBlock/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/content-plugin/location.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/content-plugin/location.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/content.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/content.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/proxy/mainLocation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/proxy/mainLocation.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +50,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "prettierjs.PrettierConfiguration.Package": "/Users/tangjiahui/Desktop/chrome-storage-helper/node_modules/prettier",
-    "ts.external.directory.path": "/Users/tangjiahui/Library/Application Support/JetBrains/Toolbox/apps/WebStorm/ch-0/223.8836.50/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
+    "ts.external.directory.path": "/Users/tangjiahui/Desktop/chrome-storage-helper/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>

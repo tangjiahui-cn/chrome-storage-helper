@@ -5,7 +5,7 @@
  * By TangJiaHui
  */
 type Data = {
-  opt: 'reload';
+  opt: 'reload' | 'get';
   data?: any;
 };
 
@@ -16,6 +16,8 @@ export default {
       case 'reload':
         window.location.reload();
         break;
+      case 'get':
+        return window.location;
       default:
         break;
     }

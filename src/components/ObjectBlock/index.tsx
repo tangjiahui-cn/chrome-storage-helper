@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Checkbox } from 'antd';
+import { Checkbox, Empty } from 'antd';
 import { css } from 'class-css';
 import classNames from 'classnames';
 
@@ -41,35 +41,39 @@ export default function ObjectBlock(props: ObjectBlockProps) {
 
   return (
     <div style={{ width: '100%', height: '100%', padding: '8px 12px', ...props?.style }}>
-      {items.map((x) => {
-        const checked = props?.selectKeys?.includes(x?.value);
-        return (
-          <div
-            key={x?.value}
-            className={classNames(itemClass, props?.selectable && itemHoverClass)}
-            onClick={() => {
-              if (!props?.selectable) return;
-              props?.onSelect?.(
-                checked
-                  ? props?.selectKeys?.filter((k) => k !== x?.value) || []
-                  : [...(props?.selectKeys || []), x?.value],
-              );
-            }}
-          >
-            {props?.selectable && <Checkbox checked={checked} />}
+      {items?.length ? (
+        items.map((x) => {
+          const checked = props?.selectKeys?.includes(x?.value);
+          return (
             <div
-              style={{
-                flex: 1,
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
+              key={x?.value}
+              className={classNames(itemClass, props?.selectable && itemHoverClass)}
+              onClick={() => {
+                if (!props?.selectable) return;
+                props?.onSelect?.(
+                  checked
+                    ? props?.selectKeys?.filter((k) => k !== x?.value) || []
+                    : [...(props?.selectKeys || []), x?.value],
+                );
               }}
             >
-              {x?.label}
+              {props?.selectable && <Checkbox checked={checked} />}
+              <div
+                style={{
+                  flex: 1,
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {x?.label}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })
+      ) : (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      )}
     </div>
   );
 }

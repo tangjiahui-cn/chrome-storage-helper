@@ -64,8 +64,8 @@ type TabSendMessage = (
   receiveCallback?: (data: ResponseData) => void,
 ) => void;
 
-declare type IObject = {
-  [K: string]: IObject | string | number | null | undefined;
+declare type IObject<T = any> = {
+  [K: string]: IObject | string | number | null | undefined | T;
 };
 declare const chrome: {
   runtime: {

@@ -15,6 +15,14 @@ class MainLocation {
       },
     });
   }
+  async get() {
+    return popup.sendContent({
+      type: 'location',
+      data: {
+        opt: 'get',
+      },
+    });
+  }
 }
 
 export const mainLocation = new MainLocation();
