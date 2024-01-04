@@ -4,16 +4,16 @@
  * At 2023/12/29
  * By TangJiaHui
  */
-import {popup} from "@/data";
+import { popup } from '@/data';
 
 class MainLocation {
-  async reload () {
+  async reload() {
     return popup.sendContent({
       type: 'location',
       data: {
-        opt: 'reload'
-      }
-    })
+        opt: 'reload',
+      },
+    });
   }
 }
 

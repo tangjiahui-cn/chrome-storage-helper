@@ -5,13 +5,13 @@
  * By TangJiaHui
  */
 export type Data = {
-  opt: 'replace' | 'getCurrent' | 'clear' | 'getItem'  | 'removeItem' | 'key' | 'setItem';
-  data: string | string[] | number | {[K: string]: any};
-}
+  opt: 'replace' | 'getCurrent' | 'clear' | 'getItem' | 'removeItem' | 'key' | 'setItem';
+  data: string | string[] | number | { [K: string]: any };
+};
 
 export default {
   id: 'sessionStorage',
-  async handle (data: Data) {
+  async handle(data: Data) {
     let key: string, value: any;
     if (Array.isArray(data.data)) {
       [key = '', value = ''] = data.data;
@@ -22,29 +22,29 @@ export default {
     switch (data.opt) {
       case 'replace':
         if (typeof data.data === 'object' && data.data && !Array.isArray(data.data)) {
-          for (const k in (data?.data as any)) {
-            window.sessionStorage.setItem(k, data?.data?.[k])
+          for (const k in data?.data as any) {
+            window.sessionStorage.setItem(k, data?.data?.[k]);
           }
         }
         break;
       case 'getCurrent':
         return window.sessionStorage;
-      case "clear":
+      case 'clear':
         window.sessionStorage.clear();
         break;
       case 'setItem':
-        window.sessionStorage.setItem(key, value)
+        window.sessionStorage.setItem(key, value);
         break;
-      case "getItem":
-        return window.sessionStorage.getItem(key)
-      case "key":
-        return window.sessionStorage.key(key as any)
+      case 'getItem':
+        return window.sessionStorage.getItem(key);
+      case 'key':
+        return window.sessionStorage.key(key as any);
         break;
-      case "removeItem":
-        window.sessionStorage.removeItem(key)
+      case 'removeItem':
+        window.sessionStorage.removeItem(key);
         break;
       default:
         break;
     }
-  }
-}
+  },
+};

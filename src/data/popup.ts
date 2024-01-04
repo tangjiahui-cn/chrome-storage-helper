@@ -6,16 +6,16 @@
  */
 export const popup = {
   // 发送到content
-  async sendContent (payload: SendDataPayload) : Promise<ResponseData> {
+  async sendContent(payload: SendDataPayload): Promise<ResponseData> {
     return new Promise((resolve, reject) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs: any[]) => {
-        const tabId = tabs?.[0]?.id
+        const tabId = tabs?.[0]?.id;
         if (tabId) {
-          chrome.tabs.sendMessage(tabId, {payload, from: 'popup'}, resolve)
+          chrome.tabs.sendMessage(tabId, { payload, from: 'popup' }, resolve);
         } else {
-          reject('tabId is not exist.')
+          reject('tabId is not exist.');
         }
-      })
-    })
+      });
+    });
   },
-}
+};

@@ -4,10 +4,10 @@
  * At 2024/1/3
  * By TangJiaHui
  */
-export function pick (object: IObject, includeKeys: string[]) {
+export function pick(object: IObject, includeKeys: string[]) {
   const result: IObject = {};
-  includeKeys.forEach(k => {
+  includeKeys.forEach((k) => {
     result[k] = object[k];
-  })
+  });
   return result;
 }

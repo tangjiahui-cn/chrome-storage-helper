@@ -1,2 +1,1 @@
-
-console.log('【mount background.js】')
+console.log('【mount background.js】');

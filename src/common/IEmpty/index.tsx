@@ -1,7 +1,5 @@
-import {Empty} from "antd";
+import { Empty } from 'antd';
 
 export default function IEmpty() {
-  return (
-    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>
-  )
+  return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
 }

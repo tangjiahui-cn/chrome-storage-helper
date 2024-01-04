@@ -1,2 +1,2 @@
-export * from './BaseEvent'
-export * from './ContentPlugin'
+export * from './BaseEvent';
+export * from './ContentPlugin';

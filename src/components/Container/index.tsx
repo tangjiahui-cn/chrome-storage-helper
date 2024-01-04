@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
 interface Props {
   width?: number | string;
   height?: number;
   children?: React.ReactNode;
 }
-export default function Container (props: Props) {
+export default function Container(props: Props) {
   return (
     <div
       style={{
@@ -13,13 +13,13 @@ export default function Container (props: Props) {
         display: 'inline-flex',
         width: props?.width || 'auto',
         height: props?.height || 'auto',
-        overflow: "hidden",
+        overflow: 'hidden',
         border: __DEV__ ? '1px solid black' : undefined,
         background: 'whitesmoke',
-        userSelect: 'none'
+        userSelect: 'none',
       }}
     >
       {props?.children}
     </div>
-  )
+  );
 }

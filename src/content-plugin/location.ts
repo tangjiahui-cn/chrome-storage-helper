@@ -7,17 +7,17 @@
 type Data = {
   opt: 'reload';
   data?: any;
-}
+};
 
 export default {
   id: 'location',
-  async handle (data: Data) {
+  async handle(data: Data) {
     switch (data.opt) {
-      case "reload":
+      case 'reload':
         window.location.reload();
         break;
       default:
         break;
     }
-  }
-}
+  },
+};

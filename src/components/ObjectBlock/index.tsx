@@ -1,23 +1,23 @@
-import React, {useMemo} from "react";
-import {Checkbox} from "antd";
-import {css} from "class-css";
-import classNames from "classnames";
+import React, { useMemo } from 'react';
+import { Checkbox } from 'antd';
+import { css } from 'class-css';
+import classNames from 'classnames';
 
 const itemClass = css({
   width: '50%',
   display: 'inline-flex',
-  overflow:'hidden',
+  overflow: 'hidden',
   cursor: 'pointer',
   fontSize: 12,
   gap: 4,
-})
+});
 
 const itemHoverClass = css({
   userSelect: 'none',
   '&:hover': {
-    background: 'whitesmoke'
-  }
-})
+    background: 'whitesmoke',
+  },
+});
 
 export interface ObjectBlockProps {
   data?: {
@@ -29,31 +29,38 @@ export interface ObjectBlockProps {
   onSelect?: (keys: string[]) => void;
 }
 
-export default function ObjectBlock (props: ObjectBlockProps) {
+export default function ObjectBlock(props: ObjectBlockProps) {
   const items = useMemo(() => {
-    return Object.keys(props?.data || {}).map(k => {
+    return Object.keys(props?.data || {}).map((k) => {
       return {
         label: k,
-        value: k
-      }
-    })
-  }, [props?.data])
+        value: k,
+      };
+    });
+  }, [props?.data]);
 
   return (
-    <div style={{width: '100%', height: '100%', padding: '8px 12px', ...props?.style}}>
-      {
-        items.map(x => {
-          const checked = props?.selectKeys?.includes(x?.value);
-          return <div key={x?.value} className={classNames(itemClass, props?.selectable && itemHoverClass)} onClick={() => {
-            if (!props?.selectable) return;
-            props?.onSelect?.(checked
-              ? props?.selectKeys?.filter(k => k !== x?.value) || []
-              : [...(props?.selectKeys || []), x?.value]
-            )
-          }}>
-            {props?.selectable && <Checkbox checked={checked}/>}
+    <div style={{ width: '100%', height: '100%', padding: '8px 12px', ...props?.style }}>
+      {items.map((x) => {
+        const checked = props?.selectKeys?.includes(x?.value);
+        return (
+          <div
+            key={x?.value}
+            className={classNames(itemClass, props?.selectable && itemHoverClass)}
+            onClick={() => {
+              if (!props?.selectable) return;
+              props?.onSelect?.(
+                checked
+                  ? props?.selectKeys?.filter((k) => k !== x?.value) || []
+                  : [...(props?.selectKeys || []), x?.value],
+              );
+            }}
+          >
+            {props?.selectable && <Checkbox checked={checked} />}
             <div
-              style={{flex: 1, overflow: 'hidden',
+              style={{
+                flex: 1,
+                overflow: 'hidden',
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
               }}
@@ -61,8 +68,8 @@ export default function ObjectBlock (props: ObjectBlockProps) {
               {x?.label}
             </div>
           </div>
-        })
-      }
+        );
+      })}
     </div>
-  )
+  );
 }

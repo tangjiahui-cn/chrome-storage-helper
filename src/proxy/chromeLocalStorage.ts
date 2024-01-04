@@ -5,14 +5,14 @@
  * By TangJiaHui
  */
 export const chromeLocalStorage = {
-  async save (localStorage: IObject) {
-    return chrome.storage.local.set({ localStorage })
+  async save(localStorage: IObject) {
+    return chrome.storage.local.set({ localStorage });
   },
-  async get () {
+  async get() {
     if (__DEV__) return localStorage;
-    return chrome.storage.local.get().then(res => res?.['localStorage'] || {})
+    return chrome.storage.local.get().then((res) => res?.['localStorage'] || {});
   },
-  async clear () {
-    return chrome.storage.local.remove('localStorage')
-  }
-}
+  async clear() {
+    return chrome.storage.local.remove('localStorage');
+  },
+};
