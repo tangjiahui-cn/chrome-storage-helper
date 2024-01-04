@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env mode=development webpack serve",
     "build": "webpack -c build/webpack.config.ts",
-    "eslint": "eslint --ext .js,.ts,.jsx,.tsx . --fix",
+    "eslint": "eslint -c ./.eslintrc.js src --ext .js,.ts,.jsx,.tsx --fix",
     "prettier": "prettier --write .",
     "preinstall": "husky install",
     "commit": "git add . && git-cz"
@@ -17,7 +17,11 @@
     }
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": []
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --cache --fix",
+      "git add"
+    ]
   },
   "keywords": [],
   "author": "",
