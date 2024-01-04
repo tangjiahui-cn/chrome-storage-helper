@@ -1,1 +1,1 @@
-// console.log('background: ')
+console.log("【mount background.js】");

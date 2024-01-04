@@ -16,6 +16,3 @@
 3、全选/反选 选择加载的项
 4、tabs页之间同步选中状态
 ```
-## 演示
-<img src='./assets/example.png' width="400"/>
-<!-- ![image](./assets/example.png) -->

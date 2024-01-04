@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dc995ae9-55b3-4ba0-8ed1-6731560b3376" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.npmrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/webpack.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/chrome.d.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/background.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/Dynamic/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/IEmpty/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/IconWrapper/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Container/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ObjectBlock/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/content-plugin/localStorage.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/content-plugin/location.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/content-plugin/sessionStorage.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/content-plugin/system.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/content.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/data/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/data/popup.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/model/BaseEvent.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/model/ContentPlugin.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/model/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/proxy/chromeLocalStorage.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/proxy/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/proxy/mainLocalStorage.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/proxy/mainLocation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/proxy/mainSessionStorage.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/copyToClipboard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/omit.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/pick.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/typings.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrome-storage-helper/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/chrome-storage-helper/background.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrome-storage-helper/content.js" beforeDir="false" afterPath="$PROJECT_DIR$/chrome-storage-helper/content.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrome-storage-helper/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/chrome-storage-helper/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrome-storage-helper/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/chrome-storage-helper/popup.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="ProjectId" id="2aTHxeJEdZN8nOnNV54XI80MNsl" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/tangjiahui/Desktop/chrome-storage-helper",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "/Users/tangjiahui/Desktop/chrome-storage-helper/node_modules/prettier",
+    "ts.external.directory.path": "/Users/tangjiahui/Desktop/chrome-storage-helper/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/build" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="formatter" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="formatter" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.formatter" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="dc995ae9-55b3-4ba0-8ed1-6731560b3376" name="Changes" comment="" />
+      <created>1704335896911</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1704335896911</updated>
+      <workItem from="1704335897989" duration="428000" />
+      <workItem from="1704336336026" duration="68000" />
+      <workItem from="1704336414687" duration="1942000" />
+      <workItem from="1704338381947" duration="1092000" />
+      <workItem from="1704345529283" duration="12000" />
+      <workItem from="1704345573150" duration="239000" />
+      <workItem from="1704345818545" duration="249000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>
