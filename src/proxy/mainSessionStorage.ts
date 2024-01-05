@@ -8,6 +8,12 @@ import { popup } from '@/data';
 
 class MainSessionStorage {
   async getCurrent() {
+    if (__DEV__) {
+      return Promise.resolve({
+        success: true,
+        data: sessionStorage,
+      });
+    }
     return popup.sendContent({
       type: 'sessionStorage',
       data: {

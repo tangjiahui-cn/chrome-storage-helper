@@ -1,3 +1,37 @@
+interface Window {
+  cookieStore: CookieStore;
+}
+
+declare interface IStore {
+  localStorage: IObject;
+  sessionStorage: IObject;
+  cookie: IObject;
+}
+
+declare type IStoreKey = keyof IStore;
+
+declare interface CookieStore {
+  get: (name: string) => Promise<Cookie>;
+  getAll: () => Promise<Cookie[]>;
+  set: (cookie: Cookie) => Promise<void>;
+  delete: (name: string) => Promise<void>;
+}
+
+declare interface Cookie {
+  name: string;
+  value: string;
+  domain?: any;
+  expires?: number;
+  partitioned?: boolean;
+  path?: string;
+  sameSite?: string;
+  secure?: boolean;
+}
+
+declare interface CookieStorage {
+  [K: string]: Cookie;
+}
+
 declare interface SqlData {
   // 保存登录数据格式
   key: string;
@@ -30,12 +64,13 @@ declare type Sender = {
   origin: string;
 };
 
-declare type SendDataFrom = 'popup' | 'background';
+declare type SendDataFrom = 'popup' | 'background' | 'content';
 declare type SendDataPayload = {
-  type: 'system' | 'sessionStorage' | 'localStorage' | 'location' | string; // 处理的数据类型（与注册插件id绑定）
+  type: 'cookieStorage' | 'system' | 'sessionStorage' | 'localStorage' | 'location' | string; // 处理的数据类型（与注册插件id绑定）
   data?: any;
 };
 declare type SendData = {
+  id: string; // 每次请求id
   from: SendDataFrom;
   payload: SendDataPayload;
 };
@@ -69,6 +104,7 @@ declare type IObject<T = any> = {
 };
 declare const chrome: {
   runtime: {
+    sendMessage: (payload: SendData, callback?: (res: any) => void) => void;
     onMessage: RuntimeOnMessage;
   };
   tabs: {

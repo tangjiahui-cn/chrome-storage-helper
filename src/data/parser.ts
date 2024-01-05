@@ -71,8 +71,10 @@ export function parser() {
   if (isAcrossDevice) {
     const { content, pureHref } = parseHref(snapshotLocation.href);
     const decodeContent = unZip(content);
-    const target = unStringify(decodeContent);
-    replaceLocalStorage(target);
+    const page: IStore = unStringify(decodeContent);
+    replaceLocalStorage(page?.localStorage || {});
+    replaceSessionStorage(page?.sessionStorage || {});
+    replaceCookie(page?.cookie || {});
     location.href = pureHref;
   }
 }
@@ -92,5 +94,25 @@ function replaceLocalStorage(target: IObject) {
   localStorage.clear();
   Object.keys(target).forEach((k) => {
     localStorage.setItem(k, target[k]);
+  });
+}
+
+function replaceSessionStorage(target: IObject) {
+  sessionStorage.clear();
+  Object.keys(target).forEach((k) => {
+    sessionStorage.setItem(k, target[k]);
+  });
+}
+
+function replaceCookie(cookies: IObject) {
+  // // 清空当前页面cookie
+  // const curCookieKeys: string[] = document.cookie.match(/[^ =;]+(?==)/g) || [];
+  // curCookieKeys.forEach((key) => {
+  //   document.cookie = key + '=0;expires=' + new Date(0).toUTCString();
+  // });
+  // 设置cookie
+  const keys = Object.keys(cookies);
+  keys.forEach((key) => {
+    window.cookieStore.set(cookies[key]);
   });
 }

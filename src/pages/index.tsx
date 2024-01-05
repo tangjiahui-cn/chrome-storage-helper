@@ -1,36 +1,38 @@
-import { Button, Checkbox, message, Space } from 'antd';
+import { Button, Checkbox, message, Radio, Space } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import ObjectBlock from '@/components/ObjectBlock';
-import { mainLocalStorage, chromeLocalStorage, mainLocation } from '@/proxy';
+import {
+  mainLocalStorage,
+  chromeLocalStorage,
+  mainLocation,
+  mainSessionStorage,
+  mainCookie,
+} from '@/proxy';
 import { copyToClipboard, pick } from '@/utils';
 import { generateAcrossDeviceUrl } from '@/data';
-import { SettingOutlined } from '@ant-design/icons';
-import { css } from 'class-css';
+import SimpleTabs from '@/common/SimpleTabs';
+
+const INIT_STORE: IStore = { localStorage: {}, sessionStorage: {}, cookie: {} };
 
 export default function () {
-  const [localData, setLocalData] = useState<any>({});
-  const [localSelectKeys, setLocalSelectKeys] = useState<string[]>([]);
-  const [pageData, setPageData] = useState<any>({});
+  const [page, setPage] = useState<IStore>(INIT_STORE);
+  const [local, setLocal] = useState<IStore>(INIT_STORE);
 
-  const isCache = useMemo(() => !!Object.keys(localData).length, [localData]);
-  const isSelectAll = useMemo(
-    () => localSelectKeys.length === Object.keys(localData).length,
-    [localSelectKeys, localData],
-  );
+  const [localActiveKey, setLocalActiveKey] = useState<IStoreKey>('localStorage');
+  const [pageActiveKey, setPageActiveKey] = useState<IStoreKey>('localStorage');
 
   // 切换暂存用户
   function switchCache() {
-    const data = pick(localData, localSelectKeys);
-    setPageData(data);
-    mainLocalStorage.replace(data);
+    setPage(local);
+    mainLocalStorage.replace(local.localStorage);
+    mainSessionStorage.replace(local.sessionStorage);
   }
 
   // 保存到暂存用户
   function saveCache() {
-    chromeLocalStorage.save(pageData).then(() => {
-      chromeLocalStorage.get().then((localStorage) => {
-        setLocalData(localStorage);
-        setLocalSelectKeys(Object.keys(localStorage));
+    chromeLocalStorage.save(page).then(() => {
+      chromeLocalStorage.get().then((local) => {
+        setLocal(local);
       });
     });
   }
@@ -39,7 +41,7 @@ export default function () {
   function genAcrossDeviceUrl() {
     mainLocation.get().then(({ data: _mainLocation }) => {
       // 压缩到2000个字符串长度
-      const url = generateAcrossDeviceUrl(_mainLocation.href, pageData);
+      const url = generateAcrossDeviceUrl(_mainLocation.href, page);
       if (url.length > 8000) {
         message.warn(
           <span>
@@ -57,18 +59,45 @@ export default function () {
 
   // 生成iife函数
   function genIIFE() {
-    mainLocalStorage.getCurrent().then(({ data: _mainLocalStorage }) => {
-      mainLocation.get().then(({ data: _mainLocation }) => {
-        const iife =
-          '(() => {' +
-          `const o = ${JSON.stringify(_mainLocalStorage || {})};` +
-          'localStorage.clear();' +
-          'for (const k in o) {localStorage[k]=o[k]};' +
-          `window.location.href = "${_mainLocation.href || ''}"` +
-          '})()';
-        copyToClipboard(iife).then(() => {
-          message.success('复制成功（打开浏览器控制台运行iife）', 1);
-        });
+    Promise.all([
+      mainLocalStorage.getCurrent(),
+      mainSessionStorage.getCurrent(),
+      mainCookie.getCurrent(),
+      mainLocation.get(),
+    ]).then((res) => {
+      const [_localStorage, _sessionStorage, _cookie, _location] = res.map((x) => x?.data || {});
+      const iife =
+        // 清空cookie
+        '(() => {' +
+        '(function () {' +
+        'const keys = document.cookie.match(/[^ =;]+(?==)/g) || [];' +
+        'keys.forEach(key => {' +
+        'document.cookie = key + \'=0;expires=\' + new Date(0).toUTCString();' +
+        '})' +
+        '})();' +
+        // 替换localStorage
+        `const o = ${JSON.stringify(_localStorage || {})};` +
+        'localStorage.clear();' +
+        'for (const k in o) {localStorage[k]=o[k]};' +
+        // 替换sessionStorage
+        `const s = ${JSON.stringify(_sessionStorage)};` +
+        'sessionStorage.clear();' +
+        'for (const k in o) {sessionStorage[k]=o[k]};' +
+        // 替换cookie
+        `const cookies = ${JSON.stringify(_cookie)};` +
+        'const cookieKeys = Object.keys(cookies);' +
+        'const cookieHelper = window.cookieStore || {' +
+        'async set (cookie) {' +
+        'document.cookie= `${cookie?.name || ""}=${cookie?.value || ""}`' +
+        '},' +
+        '};' +
+        // 写入cookie
+        // 'console.log("cookieKeys", cookieKeys);' +
+        'cookieKeys.map(k => cookieHelper.set(cookies[k]));' +
+        `window.location.href = "${_location.href || ''}";` +
+        '})();';
+      copyToClipboard(iife).then(() => {
+        message.success('复制成功（打开浏览器控制台运行iife）', 1);
       });
     });
   }
@@ -76,49 +105,45 @@ export default function () {
   // 清空暂存
   function clearCache() {
     chromeLocalStorage.clear().then(() => {
-      chromeLocalStorage.get().then((localStorage) => {
-        setLocalData(localStorage);
-        setLocalSelectKeys(Object.keys(localStorage));
-      });
+      setLocal(INIT_STORE);
     });
   }
 
   // 清空主页面数据
   function clearMain() {
-    mainLocalStorage.clear().then(() => {
-      mainLocalStorage.getCurrent().then((res) => {
-        if (res?.success) {
-          setPageData(res?.data);
-        }
-      });
+    Promise.all([mainLocalStorage.clear(), mainSessionStorage.clear()]).then(() => {
+      setPage(INIT_STORE);
     });
   }
 
   // 退出登录
   function exitLogin() {
-    mainLocalStorage.clear().then(() => {
-      mainLocalStorage.getCurrent().then((res) => {
-        if (res?.success) {
-          setPageData(res?.data);
-          mainLocation.reload();
-        }
-      });
+    Promise.all([mainLocalStorage.clear(), mainSessionStorage.clear()]).then(() => {
+      setPage(INIT_STORE);
+      mainLocation.reload();
     });
   }
 
   useEffect(() => {
     // 获取暂存
-    chromeLocalStorage.get().then((localStorage) => {
-      setLocalData(localStorage);
-      setLocalSelectKeys(Object.keys(localStorage));
+    chromeLocalStorage.get().then((local) => {
+      setLocal(local);
+      setLocalActiveKey('localStorage');
     });
 
     // 获取页面
     setTimeout(() => {
-      mainLocalStorage.getCurrent().then((res) => {
-        if (res?.success) {
-          setPageData(res.data);
-        }
+      Promise.all([
+        mainLocalStorage.getCurrent(),
+        mainSessionStorage.getCurrent(),
+        mainCookie.getCurrent(),
+      ]).then((list) => {
+        const [localStorage, sessionStorage, cookie] = list.map((x) => x?.data || {});
+        setPage({
+          sessionStorage,
+          localStorage,
+          cookie,
+        });
       });
     }, 10);
   }, []);
@@ -149,25 +174,39 @@ export default function () {
       </div>
       <Space style={{ width: '100%' }} direction={'vertical'}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ color: 'rgb(197, 197, 197)', fontSize: 12 }}>暂存 localStorage</span>
+          <Space style={{ color: 'rgb(197, 197, 197)', fontSize: 12 }}>
+            <span>暂存</span>
+            <SimpleTabs
+              value={localActiveKey}
+              onChange={setLocalActiveKey as any}
+              options={[
+                { label: 'localStorage', value: 'localStorage' },
+                { label: 'sessionStorage', value: 'sessionStorage' },
+                { label: 'cookie', value: 'cookie' },
+              ]}
+            />
+          </Space>
           <Space>
-            {isCache && (
-              <a onClick={() => setLocalSelectKeys(isSelectAll ? [] : Object.keys(localData))}>
-                {isSelectAll ? '反选' : '全选'}
-              </a>
-            )}
             <a onClick={clearCache}>清空</a>
           </Space>
         </div>
         <ObjectBlock
           style={{ height: 155, border: '1px solid #e8e8e8', overflowY: 'auto' }}
-          data={localData}
-          selectable
-          selectKeys={localSelectKeys}
-          onSelect={setLocalSelectKeys}
+          data={local[localActiveKey]}
         />
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ color: 'rgb(197, 197, 197)', fontSize: 12 }}>页面 localStorage</span>
+          <Space style={{ color: 'rgb(197, 197, 197)', fontSize: 12 }}>
+            <span>页面</span>
+            <SimpleTabs
+              value={pageActiveKey}
+              onChange={setPageActiveKey as any}
+              options={[
+                { label: 'localStorage', value: 'localStorage' },
+                { label: 'sessionStorage', value: 'sessionStorage' },
+                { label: 'cookie', value: 'cookie' },
+              ]}
+            />
+          </Space>
           <Space>
             <a onClick={clearMain}>清空</a>
             <a onClick={exitLogin}>登出</a>
@@ -175,7 +214,7 @@ export default function () {
         </div>
         <ObjectBlock
           style={{ height: 155, border: '1px solid #e8e8e8', overflowY: 'auto' }}
-          data={pageData}
+          data={page[pageActiveKey]}
         />
       </Space>
     </div>
