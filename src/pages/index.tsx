@@ -4,6 +4,8 @@ import ObjectBlock from '@/components/ObjectBlock';
 import { mainLocalStorage, chromeLocalStorage, mainLocation } from '@/proxy';
 import { copyToClipboard, pick } from '@/utils';
 import { generateAcrossDeviceUrl } from '@/data';
+import { SettingOutlined } from '@ant-design/icons';
+import { css } from 'class-css';
 
 export default function () {
   const [localData, setLocalData] = useState<any>({});
@@ -38,8 +40,35 @@ export default function () {
     mainLocation.get().then(({ data: _mainLocation }) => {
       // 压缩到2000个字符串长度
       const url = generateAcrossDeviceUrl(_mainLocation.href, pageData);
+      if (url.length > 8000) {
+        message.warn(
+          <span>
+            超出最大长度8000, 请使用 <span style={{ color: 'green' }}>IIFE模式</span>
+          </span>,
+          1,
+        );
+        return;
+      }
       copyToClipboard(url).then(() => {
-        message.success('复制成功');
+        message.success('复制成功', 1);
+      });
+    });
+  }
+
+  // 生成iife函数
+  function genIIFE() {
+    mainLocalStorage.getCurrent().then(({ data: _mainLocalStorage }) => {
+      mainLocation.get().then(({ data: _mainLocation }) => {
+        const iife =
+          '(() => {' +
+          `const o = ${JSON.stringify(_mainLocalStorage || {})};` +
+          'localStorage.clear();' +
+          'for (const k in o) {localStorage[k]=o[k]};' +
+          `window.location.href = "${_mainLocation.href || ''}"` +
+          '})()';
+        copyToClipboard(iife).then(() => {
+          message.success('复制成功（打开浏览器控制台运行iife）', 1);
+        });
       });
     });
   }
@@ -65,6 +94,18 @@ export default function () {
     });
   }
 
+  // 退出登录
+  function exitLogin() {
+    mainLocalStorage.clear().then(() => {
+      mainLocalStorage.getCurrent().then((res) => {
+        if (res?.success) {
+          setPageData(res?.data);
+          mainLocation.reload();
+        }
+      });
+    });
+  }
+
   useEffect(() => {
     // 获取暂存
     chromeLocalStorage.get().then((localStorage) => {
@@ -83,9 +124,21 @@ export default function () {
   }, []);
 
   return (
-    <div style={{ width: 450, padding: '12px 16px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Space size={16} style={{ marginBottom: 16 }}>
+    <div style={{ width: 450, padding: '14px 16px' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16,
+        }}
+      >
+        <Space>
+          <Button onClick={genAcrossDeviceUrl}>复制跨设备链接</Button>
+          <Button onClick={genIIFE}>复制IIFE</Button>
+        </Space>
+
+        <Space size={12}>
           <Button type={'primary'} onClick={switchCache}>
             切换
           </Button>
@@ -93,7 +146,6 @@ export default function () {
             保存
           </Button>
         </Space>
-        <Button onClick={genAcrossDeviceUrl}>复制跨设备链接</Button>
       </div>
       <Space style={{ width: '100%' }} direction={'vertical'}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -118,6 +170,7 @@ export default function () {
           <span style={{ color: 'rgb(197, 197, 197)', fontSize: 12 }}>页面 localStorage</span>
           <Space>
             <a onClick={clearMain}>清空</a>
+            <a onClick={exitLogin}>登出</a>
           </Space>
         </div>
         <ObjectBlock

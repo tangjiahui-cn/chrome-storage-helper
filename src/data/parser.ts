@@ -1,5 +1,5 @@
-import { pick } from '@/utils';
-import Location from '@/content-plugin/location';
+import { pick, stringify, unStringify } from '@/utils';
+import { unZip, zip } from '@/utils';
 
 /**
  * 解析跨设备链接
@@ -24,8 +24,14 @@ const KEYS = [
 // 从href中获取参数、源地址
 function loadHref(href: string) {
   const sliceIndex: number = href?.indexOf('?');
-  let origin: string = href.slice(0, sliceIndex);
-  let pairs: string[] = href.slice(sliceIndex + 1).split('&');
+  let origin: string = href;
+  let pairs: string[] = [];
+
+  if (sliceIndex > -1) {
+    const pairsStr = href.slice(sliceIndex + 1);
+    origin = href.slice(0, sliceIndex);
+    pairs = pairsStr?.length ? pairsStr.split('&') : [];
+  }
 
   return {
     origin,
@@ -56,16 +62,30 @@ function parseHref(href: string) {
   };
 }
 
+// 解析跨设备url
+// 过程：跨设备url -> 解压缩 -> 取消stringify -> 数据
 export function parser() {
   const snapshotLocation = pick(window.location as any, KEYS);
   const isAcrossDevice = snapshotLocation.href?.includes(ACROSS_DEVICE); // 是否跨设备
-  // console.log('是否跨设备： ', `【${isAcrossDevice ? '是' : '否'}】`, snapshotLocation.href);
+  console.log('是否跨设备： ', `【${isAcrossDevice ? '是' : '否'}】`, snapshotLocation.href);
   if (isAcrossDevice) {
     const { content, pureHref } = parseHref(snapshotLocation.href);
-    const target = JSON.parse(content);
+    const decodeContent = unZip(content);
+    const target = unStringify(decodeContent);
     replaceLocalStorage(target);
     location.href = pureHref;
   }
+}
+
+// 生成跨设备URL
+// 过程：数据 -> stringify -> 压缩 -> 跨设备url
+export function generateAcrossDeviceUrl(href: string, localStorage: IObject = {}) {
+  const content = stringify(localStorage);
+  const encodeContent = zip(content);
+  const full = ACROSS_DEVICE + encodeContent;
+  const { origin, pairs } = loadHref(href);
+  const url = `${origin}?${[...pairs, full].join('&')}`;
+  return url;
 }
 
 function replaceLocalStorage(target: IObject) {
@@ -73,13 +93,4 @@ function replaceLocalStorage(target: IObject) {
   Object.keys(target).forEach((k) => {
     localStorage.setItem(k, target[k]);
   });
-}
-
-// 生成跨设备URL
-export function generateAcrossDeviceUrl(href: string, localStorage: IObject = {}) {
-  const content = JSON.stringify(localStorage);
-  const encodeContent = decodeURIComponent(content);
-  const full = ACROSS_DEVICE + encodeContent;
-  const { origin, pairs } = loadHref(href);
-  return `${origin}?${[...pairs, full].join('&')}`;
 }

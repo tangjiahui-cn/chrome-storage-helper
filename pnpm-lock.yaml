@@ -11,6 +11,7 @@ specifiers:
   '@commitlint/config-conventional': ^18.4.3
   '@commitlint/cz-commitlint': ^18.4.3
   '@types/lodash': ^4.14.202
+  '@types/lz-string': ^1.5.0
   '@types/node': ^20.10.5
   '@types/react': '18'
   '@types/react-dom': '18'
@@ -38,6 +39,7 @@ specifiers:
   less-loader: ^11.1.4
   lint-staged: ^15.2.0
   lodash: ^4.17.21
+  lz-string: ^1.5.0
   prettier: ^3.1.1
   react: '18'
   react-dom: '18'
@@ -56,6 +58,7 @@ dependencies:
   antd: 4.24.12_biqbaboplfbrettd7655fr4n2y
   class-css: 1.0.24_7ln3lwozyybesesf4lghtaucbi
   lodash: 4.17.21
+  lz-string: 1.5.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   uuid: 9.0.1
@@ -69,6 +72,7 @@ devDependencies:
   '@commitlint/cli': 18.4.3_typescript@5.3.3
   '@commitlint/config-conventional': 18.4.3
   '@commitlint/cz-commitlint': 18.4.3_dgsldezf4iuiqfvnqrrssi4jmq
+  '@types/lz-string': 1.5.0
   '@types/node': 20.10.5
   '@types/react': 18.2.45
   '@types/react-dom': 18.2.18
@@ -1912,6 +1916,13 @@ packages:
   /@types/lodash/4.14.202:
     resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
     dev: false
+
+  /@types/lz-string/1.5.0:
+    resolution: {integrity: sha512-s84fKOrzqqNCAPljhVyC5TjAo6BH4jKHw9NRNFNiRUY5QSgZCmVm5XILlWbisiKl+0OcS7eWihmKGS5akc2iQw==}
+    deprecated: This is a stub types definition. lz-string provides its own type definitions, so you do not need this installed.
+    dependencies:
+      lz-string: 1.5.0
+    dev: true
 
   /@types/mime/1.3.5:
     resolution: {integrity: sha512-/pyBZWSLD2n0dcHE3hq8s8ZvcETHtEuF+3E7XVt0Ig2nvsVQXdghHVcEkIWjy9A0wKfTn97a/PSDYohKIlnP/w==}
@@ -5441,6 +5452,10 @@ packages:
     dependencies:
       yallist: 4.0.0
     dev: true
+
+  /lz-string/1.5.0:
+    resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
+    hasBin: true
 
   /make-dir/2.1.0:
     resolution: {integrity: sha512-LS9X+dc8KLxXCb8dni79fLIIUA5VyZoyjSMCwTluaXA0o27cCK0bhXkpgw+sTXVpPy/lSO57ilRixqk0vDmtRA==}
