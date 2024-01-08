@@ -86,7 +86,7 @@ export default function () {
         // 替换sessionStorage
         `const s = ${JSON.stringify(_sessionStorage)};` +
         'sessionStorage.clear();' +
-        'for (const k in o) {sessionStorage[k]=o[k]};' +
+        'for (const k in s) {sessionStorage[k]=s[k]};' +
         // 替换cookie
         `const cookies = ${JSON.stringify(_cookie)};` +
         'const cookieKeys = Object.keys(cookies);' +

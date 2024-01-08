@@ -67,7 +67,7 @@ function parseHref(href: string) {
 export function parser() {
   const snapshotLocation = pick(window.location as any, KEYS);
   const isAcrossDevice = snapshotLocation.href?.includes(ACROSS_DEVICE); // 是否跨设备
-  console.log('是否跨设备： ', `【${isAcrossDevice ? '是' : '否'}】`, snapshotLocation.href);
+  // console.log('是否跨设备： ', `【${isAcrossDevice ? '是' : '否'}】`, snapshotLocation.href);
   if (isAcrossDevice) {
     const { content, pureHref } = parseHref(snapshotLocation.href);
     const decodeContent = unZip(content);
