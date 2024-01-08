@@ -22,20 +22,22 @@ contentPlugins.use(SessionStorage);
 contentPlugins.use(System);
 contentPlugins.use(CookieStorage);
 
-sendPopup('', { isMount: true });
-chrome?.runtime?.onMessage?.addListener((request, sender, sendResponse) => {
-  contentPlugins.process(request.payload).then((data) => {
-    sendPopup(request.id, {
-      success: true,
-      data,
+if (!__DEV__) {
+  sendPopup('', { isMount: true });
+  chrome?.runtime?.onMessage?.addListener((request, sender, sendResponse) => {
+    contentPlugins.process(request.payload).then((data) => {
+      sendPopup(request.id, {
+        success: true,
+        data,
+      });
     });
   });
-});
 
-function sendPopup(id: string, payload: SendDataPayload) {
-  chrome.runtime.sendMessage({
-    id,
-    payload,
-    from: 'content',
-  });
+  function sendPopup(id: string, payload: SendDataPayload) {
+    chrome.runtime.sendMessage({
+      id,
+      payload,
+      from: 'content',
+    });
+  }
 }

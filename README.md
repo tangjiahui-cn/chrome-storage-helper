@@ -17,4 +17,17 @@
 2、加载存储localStorage到当前页
 3、全选/反选 选择加载的项
 4、tabs页之间同步选中状态
+5、IIFE跨浏览器恢复登录用户页面
+6、跨设备链接（一个地址访问恢复登录用户状态）【有点BUG】
+```
+## 本地开发
+```shell
+# 开发chrome扩展（如果修改content，则需要刷新插件）
+pnpm preview
+
+# 查看UI
+pnpm dev:web
+
+# 构建产物
+pnpm build
 ```

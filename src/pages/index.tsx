@@ -38,14 +38,17 @@ function useInit(): [IStore, (store: IStore) => void] {
   useEffect(() => {
     // 处理content已加载完成的情况（content加载完成后，popup打开）
     fetchStore();
-    // 处理content首次挂载（content未加载完成，popup打开）
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      if (request.from === 'content' && !request.id) {
-        if (request.payload.isMount) {
-          fetchStore();
+
+    if (!__DEV__) {
+      // 处理content首次挂载（content未加载完成，popup打开）
+      chrome?.runtime?.onMessage?.addListener((request, sender, sendResponse) => {
+        if (request.from === 'content' && !request.id) {
+          if (request.payload.isMount) {
+            fetchStore();
+          }
         }
-      }
-    });
+      });
+    }
   }, []);
   return [store, setStore];
 }

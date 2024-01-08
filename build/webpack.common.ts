@@ -1,11 +1,10 @@
 import * as path from 'path';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { ProvidePlugin, DefinePlugin, Configuration } from 'webpack';
 import CopyPlugin from 'copy-webpack-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
 import pkg from '../package.json';
 import 'webpack-dev-server';
-const root = (...args: any) => path.resolve(__dirname, '../', ...args);
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+export const root = (...args: any) => path.resolve(__dirname, '../', ...args);
 
 // 是否开发环境
 const __DEV__ = process.env.mode === 'development';
@@ -13,11 +12,10 @@ const __PREVIEW__ = process.env.mode === 'preview';
 // 打包目录
 const BUILD_DIR = root(pkg.name);
 
-module.exports = {
-  mode: __DEV__ ? 'development' : 'production',
-  devtool: __DEV__ ? 'source-map' : undefined,
+export default {
+  mode: 'production',
   entry: {
-    popup: root('./src/index.tsx'),
+    popup: root('./src/popup.tsx'),
     content: root('./src/content.ts'),
     background: root('./src/background.ts'),
   },
@@ -25,11 +23,6 @@ module.exports = {
     clean: true,
     path: BUILD_DIR,
     filename: '[name].js',
-  },
-  devServer: {
-    port: 9988,
-    open: true,
-    hot: true,
   },
   cache: {
     type: 'memory',
@@ -43,18 +36,6 @@ module.exports = {
     },
     extensions: ['.ts', '.tsx', '...'],
   },
-  optimization: __PREVIEW__
-    ? {
-        minimize: false,
-      }
-    : {
-        minimize: true,
-        minimizer: [
-          new TerserPlugin({
-            extractComments: false,
-          }),
-        ],
-      },
   module: {
     rules: [
       {
@@ -78,7 +59,17 @@ module.exports = {
         ],
       },
       {
-        test: /\.(ts|tsx)$/,
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-typescript'],
+          },
+        },
+      },
+      {
+        test: /\.tsx$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
