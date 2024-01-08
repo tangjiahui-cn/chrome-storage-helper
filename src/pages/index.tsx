@@ -228,21 +228,21 @@ export default function () {
         </Space>
 
         {/* 底部配置项 */}
-        <Space style={{ marginTop: 8, fontSize: 12, color: '#676767', userSelect: 'none' }}>
-          <Dynamic type={'rotate'}>
-            <SettingOutlined style={{ cursor: 'pointer' }} />
-          </Dynamic>
-          <Dynamic type={'scale'}>
-            <span
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                setLocaleType(localeType === 1 ? 2 : 1);
-              }}
-            >
-              {localeType === 1 ? 'ZH' : 'EN'}
-            </span>
-          </Dynamic>
-        </Space>
+        {/*<Space style={{ marginTop: 8, fontSize: 12, color: '#676767', userSelect: 'none' }}>*/}
+        {/*  <Dynamic type={'rotate'}>*/}
+        {/*    <SettingOutlined style={{ cursor: 'pointer' }} />*/}
+        {/*  </Dynamic>*/}
+        {/*  <Dynamic type={'scale'}>*/}
+        {/*    <span*/}
+        {/*      style={{ cursor: 'pointer' }}*/}
+        {/*      onClick={() => {*/}
+        {/*        setLocaleType(localeType === 1 ? 2 : 1);*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      {localeType === 1 ? 'ZH' : 'EN'}*/}
+        {/*    </span>*/}
+        {/*  </Dynamic>*/}
+        {/*</Space>*/}
       </div>
     </LocaleProvider>
   );
