@@ -5,7 +5,6 @@
  * By TangJiaHui
  */
 import { v4 as uuid } from 'uuid';
-import __ from 'lodash/fp/__';
 
 // 等待返回请求队列;
 export const popupReceiveList = new Map<string, (payload: any) => void>();

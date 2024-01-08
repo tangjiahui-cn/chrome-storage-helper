@@ -16,7 +16,7 @@ const BUILD_DIR = root(pkg.name + (__PRODUCTION__ ? '' : '-dev'));
 export default {
   mode: 'production',
   entry: {
-    popup: root('./src/popup.tsx'),
+    popup: root('./src/popup.ts'),
     content: root('./src/content.ts'),
     background: root('./src/background.ts'),
   },
