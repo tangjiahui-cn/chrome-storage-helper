@@ -34,9 +34,12 @@ export function popupListen() {
   chrome.runtime.onMessage.addListener((req) => {
     // 处理来自content的数据
     if (req.from === 'content') {
-      const resolve = popupReceiveList.get(req.id);
-      if (resolve) {
-        resolve(req.payload);
+      // 处理回调请求
+      if (req.id) {
+        const resolve = popupReceiveList.get(req.id);
+        if (resolve) {
+          resolve(req.payload);
+        }
       }
     }
   });

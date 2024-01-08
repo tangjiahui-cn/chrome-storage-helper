@@ -9,6 +9,7 @@ const root = (...args: any) => path.resolve(__dirname, '../', ...args);
 
 // 是否开发环境
 const __DEV__ = process.env.mode === 'development';
+const __PREVIEW__ = process.env.mode === 'preview';
 // 打包目录
 const BUILD_DIR = root(pkg.name);
 
@@ -31,8 +32,7 @@ module.exports = {
     hot: true,
   },
   cache: {
-    type: 'filesystem',
-    allowCollectingMemory: true,
+    type: 'memory',
   },
   performance: {
     hints: false,
@@ -43,14 +43,18 @@ module.exports = {
     },
     extensions: ['.ts', '.tsx', '...'],
   },
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        extractComments: false,
-      }),
-    ],
-  },
+  optimization: __PREVIEW__
+    ? {
+        minimize: false,
+      }
+    : {
+        minimize: true,
+        minimizer: [
+          new TerserPlugin({
+            extractComments: false,
+          }),
+        ],
+      },
   module: {
     rules: [
       {
@@ -95,6 +99,7 @@ module.exports = {
     }),
     new DefinePlugin({
       __DEV__,
+      __PREVIEW__,
     }),
     new CopyPlugin({
       patterns: [{ from: root('./public'), to: BUILD_DIR, toType: 'dir' }],

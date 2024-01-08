@@ -4,7 +4,7 @@
   "description": "一个chrome-extension，方便在开发、预发、正式环境之间的对登录信息快速切换，并支持跨机器实现用户信息复现。",
   "main": "index.js",
   "scripts": {
-    "dev": "nr build -w",
+    "dev": "cross-env mode=preview nr build -w",
     "dev:web": "cross-env mode=development webpack serve -c build/webpack.config.ts",
     "build": "webpack -c build/webpack.config.ts",
     "eslint": "eslint -c ./.eslintrc.js src --ext .js,.ts,.jencsx,.tsx --fix",

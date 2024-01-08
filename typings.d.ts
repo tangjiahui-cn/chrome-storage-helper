@@ -1,4 +1,5 @@
 declare const __DEV__: boolean;
+declare const __PREVIEW__: boolean;
 
 declare module '*.json' {
   const object: {

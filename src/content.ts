@@ -22,13 +22,9 @@ contentPlugins.use(SessionStorage);
 contentPlugins.use(System);
 contentPlugins.use(CookieStorage);
 
+sendPopup('', { isMount: true });
 chrome?.runtime?.onMessage?.addListener((request, sender, sendResponse) => {
   contentPlugins.process(request.payload).then((data) => {
-    // console.log('返回值： ', request.payload,  data);
-    // sendResponse?.({
-    //   success: true,
-    //   data,
-    // });
     sendPopup(request.id, {
       success: true,
       data,
@@ -36,7 +32,7 @@ chrome?.runtime?.onMessage?.addListener((request, sender, sendResponse) => {
   });
 });
 
-function sendPopup(id: string, payload: any) {
+function sendPopup(id: string, payload: SendDataPayload) {
   chrome.runtime.sendMessage({
     id,
     payload,

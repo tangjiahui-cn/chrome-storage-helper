@@ -66,8 +66,10 @@ declare type Sender = {
 
 declare type SendDataFrom = 'popup' | 'background' | 'content';
 declare type SendDataPayload = {
-  type: 'cookieStorage' | 'system' | 'sessionStorage' | 'localStorage' | 'location' | string; // 处理的数据类型（与注册插件id绑定）
+  type?: 'cookieStorage' | 'system' | 'sessionStorage' | 'localStorage' | 'location' | string; // 处理的数据类型（与注册插件id绑定）
   data?: any;
+  success?: boolean;  // 是否成功
+  isMount?: boolean;  // 是否初次加载
 };
 declare type SendData = {
   id: string; // 每次请求id

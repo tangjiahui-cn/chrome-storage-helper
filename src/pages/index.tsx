@@ -1,5 +1,5 @@
-import { Button, Checkbox, message, Radio, Space } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import { Button, message, Space } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import ObjectBlock from '@/components/ObjectBlock';
 import {
   mainLocalStorage,
@@ -8,14 +8,50 @@ import {
   mainSessionStorage,
   mainCookie,
 } from '@/proxy';
-import { copyToClipboard, pick } from '@/utils';
+import { copyToClipboard } from '@/utils';
 import { generateAcrossDeviceUrl } from '@/data';
 import SimpleTabs from '@/common/SimpleTabs';
 
 const INIT_STORE: IStore = { localStorage: {}, sessionStorage: {}, cookie: {} };
 
+function useInit(): [IStore, (store: IStore) => void] {
+  const isSetRef = useRef(false);
+  const [store, setStore] = useState<IStore>(INIT_STORE);
+
+  function fetchStore() {
+    if (isSetRef.current) return;
+    Promise.all([
+      mainLocalStorage.getCurrent(),
+      mainSessionStorage.getCurrent(),
+      mainCookie.getCurrent(),
+    ]).then((list) => {
+      const [localStorage, sessionStorage, cookie] = list.map((x) => x?.data || {});
+      isSetRef.current = true;
+      setStore({
+        sessionStorage,
+        localStorage,
+        cookie,
+      });
+    });
+  }
+
+  useEffect(() => {
+    // 处理content已加载完成的情况（content加载完成后，popup打开）
+    fetchStore();
+    // 处理content首次挂载（content未加载完成，popup打开）
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.from === 'content' && !request.id) {
+        if (request.payload.isMount) {
+          fetchStore();
+        }
+      }
+    });
+  }, []);
+  return [store, setStore];
+}
+
 export default function () {
-  const [page, setPage] = useState<IStore>(INIT_STORE);
+  const [page, setPage] = useInit(); // useState<IStore>(INIT_STORE);
   const [local, setLocal] = useState<IStore>(INIT_STORE);
 
   const [localActiveKey, setLocalActiveKey] = useState<IStoreKey>('localStorage');
@@ -72,7 +108,7 @@ export default function () {
         '(function () {' +
         'const keys = document.cookie.match(/[^ =;]+(?==)/g) || [];' +
         'keys.forEach(key => {' +
-        'document.cookie = key + \'=0;expires=\' + new Date(0).toUTCString();' +
+        'document.cookie = key + "=0;expires=" + new Date(0).toUTCString();' +
         '})' +
         '})();' +
         // 替换localStorage
@@ -130,22 +166,6 @@ export default function () {
       setLocal(local);
       setLocalActiveKey('localStorage');
     });
-
-    // 获取页面
-    setTimeout(() => {
-      Promise.all([
-        mainLocalStorage.getCurrent(),
-        mainSessionStorage.getCurrent(),
-        mainCookie.getCurrent(),
-      ]).then((list) => {
-        const [localStorage, sessionStorage, cookie] = list.map((x) => x?.data || {});
-        setPage({
-          sessionStorage,
-          localStorage,
-          cookie,
-        });
-      });
-    }, 10);
   }, []);
 
   return (
