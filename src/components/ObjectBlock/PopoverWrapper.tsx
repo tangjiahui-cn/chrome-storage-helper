@@ -11,6 +11,16 @@ const popoverOverClass = css({
       background: 'rgba(0,0,0,0.03)',
     },
   },
+  '& .ant-popover-title': {
+    padding: 0,
+  },
+});
+
+const titleClass = css({
+  width: 300,
+  wordBreak: 'break-all',
+  whiteSpace: 'wrap',
+  padding: '4px 8px 0',
 });
 
 const contentClass = css({
@@ -21,6 +31,7 @@ const contentClass = css({
   fontSize: '0.75rem',
   cursor: 'pointer',
   padding: '4px 8px',
+  wordBreak: 'break-all',
 });
 
 interface IProps {
@@ -31,7 +42,7 @@ interface IProps {
 export default function PopoverWrapper(props: IProps) {
   return (
     <Popover
-      title={props?.title}
+      title={<div className={titleClass}>{props?.title}</div>}
       overlayClassName={popoverOverClass}
       content={
         <div

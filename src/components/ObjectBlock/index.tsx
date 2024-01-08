@@ -4,6 +4,7 @@ import { css } from 'class-css';
 import PopoverWrapper from './PopoverWrapper';
 import classNames from 'classnames';
 import { useLocale } from '@/locales';
+import { isObject } from 'lodash';
 
 const itemClass = css({
   width: '50%',
@@ -58,7 +59,8 @@ export default function ObjectBlock(props: ObjectBlockProps) {
         items.map((x) => {
           const checked = props?.selectKeys?.includes(x?.value);
           const objectKey = x?.value;
-          const objectValue = props?.data?.[x?.value];
+          const value = props?.data?.[x?.value];
+          const objectValue = isObject(value) ? JSON.stringify(value) : value;
           return (
             <div
               key={x?.value}
