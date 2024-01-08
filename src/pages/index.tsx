@@ -1,5 +1,5 @@
 import { Button, message, Space } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ObjectBlock from '@/components/ObjectBlock';
 import {
   mainLocalStorage,
@@ -12,10 +12,20 @@ import { copyToClipboard } from '@/utils';
 import { generateAcrossDeviceUrl } from '@/data';
 import SimpleTabs from '@/common/SimpleTabs';
 import { useInitPopup } from '@/hooks';
+import { SettingOutlined } from '@ant-design/icons';
+import Dynamic from '@/common/Dynamic';
+import { en_US, Locale, LocaleProvider, useLocale, zh_CN } from '@/locales';
 
 const INIT_STORE: IStore = { localStorage: {}, sessionStorage: {}, cookie: {} };
 
+const LOCALE_MAP = {
+  1: zh_CN,
+  2: en_US,
+};
+
 export default function () {
+  const [localeType, setLocaleType] = useState<1 | 2>(1);
+  const locale = useMemo(() => LOCALE_MAP[localeType], [localeType]);
   const [page, setPage, loading] = useInitPopup(INIT_STORE);
   const [local, setLocal] = useState<IStore>(INIT_STORE);
 
@@ -145,76 +155,95 @@ export default function () {
   }, []);
 
   return (
-    <div style={{ width: 450, padding: '14px 16px' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 16,
-        }}
-      >
-        <Space>
-          {/*<Button onClick={genAcrossDeviceUrl}>复制跨设备链接</Button>*/}
-          <Button onClick={genIIFE}>复制跨浏览器 IIFE</Button>
+    <LocaleProvider value={locale}>
+      <div style={{ width: 450, padding: '14px 16px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 16,
+          }}
+        >
+          <Space>
+            {/*<Button onClick={genAcrossDeviceUrl}>复制跨设备链接</Button>*/}
+            <Button onClick={genIIFE}>{locale.COPY_IIFE}</Button>
+          </Space>
+
+          <Space size={12}>
+            <Button type={'primary'} onClick={switchCache}>
+              {locale.SWITCH}
+            </Button>
+            <Button type={'primary'} onClick={saveCache}>
+              {locale.SAVE}
+            </Button>
+          </Space>
+        </div>
+        <Space style={{ width: '100%' }} direction={'vertical'}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Space style={{ color: 'rgb(197, 197, 197)', fontSize: 12 }}>
+              <span>{locale.TEMPORARY}</span>
+              <SimpleTabs
+                value={localActiveKey}
+                onChange={setLocalActiveKey as any}
+                options={[
+                  { label: 'localStorage', value: 'localStorage' },
+                  { label: 'sessionStorage', value: 'sessionStorage' },
+                  { label: 'cookie', value: 'cookie' },
+                ]}
+              />
+            </Space>
+            <Space>
+              <a onClick={clearCache}>{locale.CLEAR}</a>
+            </Space>
+          </div>
+          <ObjectBlock
+            style={{ height: 155, border: '1px solid #e8e8e8', overflowY: 'auto' }}
+            data={local[localActiveKey]}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Space style={{ color: 'rgb(197, 197, 197)', fontSize: 12 }}>
+              <span>{locale.PAGE}</span>
+              <SimpleTabs
+                value={pageActiveKey}
+                onChange={setPageActiveKey as any}
+                options={[
+                  { label: 'localStorage', value: 'localStorage' },
+                  { label: 'sessionStorage', value: 'sessionStorage' },
+                  { label: 'cookie', value: 'cookie' },
+                ]}
+              />
+            </Space>
+            <Space>
+              <a onClick={clearMain}>{locale.CLEAR}</a>
+              <a onClick={refreshMain}>{locale.REFRESH}</a>
+              <a onClick={exitLogin}>{locale.LOGOUT}</a>
+            </Space>
+          </div>
+          <ObjectBlock
+            loading={loading}
+            style={{ height: 155, border: '1px solid #e8e8e8', overflowY: 'auto' }}
+            data={page[pageActiveKey]}
+          />
         </Space>
 
-        <Space size={12}>
-          <Button type={'primary'} onClick={switchCache}>
-            切换
-          </Button>
-          <Button type={'primary'} onClick={saveCache}>
-            保存
-          </Button>
+        {/* 底部配置项 */}
+        <Space style={{ marginTop: 8, fontSize: 12, color: '#676767', userSelect: 'none' }}>
+          <Dynamic type={'rotate'}>
+            <SettingOutlined style={{ cursor: 'pointer' }} />
+          </Dynamic>
+          <Dynamic type={'scale'}>
+            <span
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                setLocaleType(localeType === 1 ? 2 : 1);
+              }}
+            >
+              {localeType === 1 ? 'ZH' : 'EN'}
+            </span>
+          </Dynamic>
         </Space>
       </div>
-      <Space style={{ width: '100%' }} direction={'vertical'}>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Space style={{ color: 'rgb(197, 197, 197)', fontSize: 12 }}>
-            <span>暂存</span>
-            <SimpleTabs
-              value={localActiveKey}
-              onChange={setLocalActiveKey as any}
-              options={[
-                { label: 'localStorage', value: 'localStorage' },
-                { label: 'sessionStorage', value: 'sessionStorage' },
-                { label: 'cookie', value: 'cookie' },
-              ]}
-            />
-          </Space>
-          <Space>
-            <a onClick={clearCache}>清空</a>
-          </Space>
-        </div>
-        <ObjectBlock
-          style={{ height: 155, border: '1px solid #e8e8e8', overflowY: 'auto' }}
-          data={local[localActiveKey]}
-        />
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Space style={{ color: 'rgb(197, 197, 197)', fontSize: 12 }}>
-            <span>页面</span>
-            <SimpleTabs
-              value={pageActiveKey}
-              onChange={setPageActiveKey as any}
-              options={[
-                { label: 'localStorage', value: 'localStorage' },
-                { label: 'sessionStorage', value: 'sessionStorage' },
-                { label: 'cookie', value: 'cookie' },
-              ]}
-            />
-          </Space>
-          <Space>
-            <a onClick={clearMain}>清空</a>
-            <a onClick={refreshMain}>刷新</a>
-            <a onClick={exitLogin}>登出</a>
-          </Space>
-        </div>
-        <ObjectBlock
-          loading={loading}
-          style={{ height: 155, border: '1px solid #e8e8e8', overflowY: 'auto' }}
-          data={page[pageActiveKey]}
-        />
-      </Space>
-    </div>
+    </LocaleProvider>
   );
 }

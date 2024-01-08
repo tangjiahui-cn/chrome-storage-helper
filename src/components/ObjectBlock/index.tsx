@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
-import { Checkbox, Empty, Popover, Spin } from 'antd';
+import { Checkbox, Empty, Spin } from 'antd';
 import { css } from 'class-css';
 import PopoverWrapper from './PopoverWrapper';
 import classNames from 'classnames';
+import { useLocale } from '@/locales';
 
 const itemClass = css({
   width: '50%',
@@ -32,6 +33,8 @@ export interface ObjectBlockProps {
 }
 
 export default function ObjectBlock(props: ObjectBlockProps) {
+  const locale = useLocale();
+
   const items = useMemo(() => {
     return Object.keys(props?.data || {}).map((k) => {
       return {
@@ -86,7 +89,7 @@ export default function ObjectBlock(props: ObjectBlockProps) {
           );
         })
       ) : (
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={locale.NO_DATA} />
       )}
 
       {/* 加载中 */}

@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dc995ae9-55b3-4ba0-8ed1-6731560b3376" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/locales/en-US.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/locales/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/locales/zh-CN.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ObjectBlock/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ObjectBlock/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,7 +61,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.dev">
+  <component name="RunManager" selected="npm.dev:web">
     <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -110,8 +114,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.dev" />
         <item itemvalue="npm.dev:web" />
+        <item itemvalue="npm.dev" />
         <item itemvalue="npm.preview" />
         <item itemvalue="npm.eslint" />
         <item itemvalue="npm.prettier" />
@@ -137,7 +141,7 @@
       <workItem from="1704675264036" duration="4103000" />
       <workItem from="1704694862842" duration="105000" />
       <workItem from="1704694973288" duration="78000" />
-      <workItem from="1704695059607" duration="4965000" />
+      <workItem from="1704695059607" duration="7573000" />
     </task>
     <servers />
   </component>
