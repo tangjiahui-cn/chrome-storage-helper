@@ -7,6 +7,14 @@
 import { popup } from '@/data';
 
 export const mainCookie = {
+  async clear() {
+    return popup.sendContent({
+      type: 'cookieStorage',
+      data: {
+        opt: 'clear',
+      },
+    });
+  },
   async get(name: string) {
     return popup.sendContent({
       type: 'cookieStorage',

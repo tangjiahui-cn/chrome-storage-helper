@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { Checkbox, Empty } from 'antd';
+import { Checkbox, Empty, Popover, Spin } from 'antd';
 import { css } from 'class-css';
+import PopoverWrapper from './PopoverWrapper';
 import classNames from 'classnames';
 
 const itemClass = css({
@@ -23,6 +24,7 @@ export interface ObjectBlockProps {
   data?: {
     [K: string]: string;
   };
+  loading?: boolean;
   selectKeys?: string[];
   selectable?: boolean; // 是否可以选中
   style?: React.CSSProperties;
@@ -40,14 +42,24 @@ export default function ObjectBlock(props: ObjectBlockProps) {
   }, [props?.data]);
 
   return (
-    <div style={{ width: '100%', height: '100%', padding: '8px 12px', ...props?.style }}>
+    <div
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        padding: '8px 12px',
+        ...props?.style,
+      }}
+    >
       {items?.length ? (
         items.map((x) => {
           const checked = props?.selectKeys?.includes(x?.value);
+          const objectKey = x?.value;
+          const objectValue = props?.data?.[x?.value];
           return (
             <div
               key={x?.value}
-              className={classNames(itemClass, props?.selectable && itemHoverClass)}
+              className={classNames(itemClass, itemHoverClass)}
               onClick={() => {
                 if (!props?.selectable) return;
                 props?.onSelect?.(
@@ -58,21 +70,42 @@ export default function ObjectBlock(props: ObjectBlockProps) {
               }}
             >
               {props?.selectable && <Checkbox checked={checked} />}
-              <div
-                style={{
-                  flex: 1,
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {x?.label}
-              </div>
+              <PopoverWrapper title={objectKey} content={objectValue}>
+                <div
+                  style={{
+                    flex: 1,
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {x?.label}
+                </div>
+              </PopoverWrapper>
             </div>
           );
         })
       ) : (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      )}
+
+      {/* 加载中 */}
+      {props?.loading && (
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(255,255,255,0.7)',
+          }}
+        >
+          <Spin spinning />
+        </div>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import { Button, message, Space } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ObjectBlock from '@/components/ObjectBlock';
 import {
   mainLocalStorage,
@@ -11,50 +11,12 @@ import {
 import { copyToClipboard } from '@/utils';
 import { generateAcrossDeviceUrl } from '@/data';
 import SimpleTabs from '@/common/SimpleTabs';
+import { useInitPopup } from '@/hooks';
 
 const INIT_STORE: IStore = { localStorage: {}, sessionStorage: {}, cookie: {} };
 
-function useInit(): [IStore, (store: IStore) => void] {
-  const isSetRef = useRef(false);
-  const [store, setStore] = useState<IStore>(INIT_STORE);
-
-  function fetchStore() {
-    if (isSetRef.current) return;
-    Promise.all([
-      mainLocalStorage.getCurrent(),
-      mainSessionStorage.getCurrent(),
-      mainCookie.getCurrent(),
-    ]).then((list) => {
-      const [localStorage, sessionStorage, cookie] = list.map((x) => x?.data || {});
-      isSetRef.current = true;
-      setStore({
-        sessionStorage,
-        localStorage,
-        cookie,
-      });
-    });
-  }
-
-  useEffect(() => {
-    // 处理content已加载完成的情况（content加载完成后，popup打开）
-    fetchStore();
-
-    if (!__DEV__) {
-      // 处理content首次挂载（content未加载完成，popup打开）
-      chrome?.runtime?.onMessage?.addListener((request, sender, sendResponse) => {
-        if (request.from === 'content' && !request.id) {
-          if (request.payload.isMount) {
-            fetchStore();
-          }
-        }
-      });
-    }
-  }, []);
-  return [store, setStore];
-}
-
 export default function () {
-  const [page, setPage] = useInit(); // useState<IStore>(INIT_STORE);
+  const [page, setPage, loading] = useInitPopup(INIT_STORE);
   const [local, setLocal] = useState<IStore>(INIT_STORE);
 
   const [localActiveKey, setLocalActiveKey] = useState<IStoreKey>('localStorage');
@@ -108,6 +70,9 @@ export default function () {
       const iife =
         // 清空cookie
         '(() => {' +
+        // 跳转页面
+        `window.location.href = "${_location.href || ''}";` +
+        // 清空cookie
         '(function () {' +
         'const keys = document.cookie.match(/[^ =;]+(?==)/g) || [];' +
         'keys.forEach(key => {' +
@@ -133,10 +98,9 @@ export default function () {
         // 写入cookie
         // 'console.log("cookieKeys", cookieKeys);' +
         'cookieKeys.map(k => cookieHelper.set(cookies[k]));' +
-        `window.location.href = "${_location.href || ''}";` +
         '})();';
       copyToClipboard(iife).then(() => {
-        message.success('复制成功（打开浏览器控制台运行iife）', 1);
+        message.success('复制成功（粘贴到浏览器控制台运行 IIFE）', 1);
       });
     });
   }
@@ -150,17 +114,26 @@ export default function () {
 
   // 清空主页面数据
   function clearMain() {
-    Promise.all([mainLocalStorage.clear(), mainSessionStorage.clear()]).then(() => {
-      setPage(INIT_STORE);
-    });
+    Promise.all([mainLocalStorage.clear(), mainSessionStorage.clear(), mainCookie.clear()]).then(
+      () => {
+        setPage(INIT_STORE);
+      },
+    );
+  }
+
+  // 刷新主页面数据
+  function refreshMain() {
+    mainLocation.reload();
   }
 
   // 退出登录
   function exitLogin() {
-    Promise.all([mainLocalStorage.clear(), mainSessionStorage.clear()]).then(() => {
-      setPage(INIT_STORE);
-      mainLocation.reload();
-    });
+    Promise.all([mainLocalStorage.clear(), mainSessionStorage.clear(), mainCookie.clear()]).then(
+      () => {
+        setPage(INIT_STORE);
+        mainLocation.reload();
+      },
+    );
   }
 
   useEffect(() => {
@@ -182,8 +155,8 @@ export default function () {
         }}
       >
         <Space>
-          <Button onClick={genAcrossDeviceUrl}>复制跨设备链接</Button>
-          <Button onClick={genIIFE}>复制IIFE</Button>
+          {/*<Button onClick={genAcrossDeviceUrl}>复制跨设备链接</Button>*/}
+          <Button onClick={genIIFE}>复制跨浏览器 IIFE</Button>
         </Space>
 
         <Space size={12}>
@@ -232,10 +205,12 @@ export default function () {
           </Space>
           <Space>
             <a onClick={clearMain}>清空</a>
+            <a onClick={refreshMain}>刷新</a>
             <a onClick={exitLogin}>登出</a>
           </Space>
         </div>
         <ObjectBlock
+          loading={loading}
           style={{ height: 155, border: '1px solid #e8e8e8', overflowY: 'auto' }}
           data={page[pageActiveKey]}
         />

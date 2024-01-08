@@ -9,8 +9,9 @@ export const root = (...args: any) => path.resolve(__dirname, '../', ...args);
 // 是否开发环境
 const __DEV__ = process.env.mode === 'development';
 const __PREVIEW__ = process.env.mode === 'preview';
+const __PRODUCTION__ = process.env.mode === 'production';
 // 打包目录
-const BUILD_DIR = root(pkg.name);
+const BUILD_DIR = root(pkg.name + (__PRODUCTION__ ? '' : '-dev'));
 
 export default {
   mode: 'production',
@@ -91,6 +92,7 @@ export default {
     new DefinePlugin({
       __DEV__,
       __PREVIEW__,
+      __PRODUCTION__,
     }),
     new CopyPlugin({
       patterns: [{ from: root('./public'), to: BUILD_DIR, toType: 'dir' }],
