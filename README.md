@@ -23,7 +23,7 @@
 ## 本地开发
 ```shell
 # 开发chrome扩展（如果修改content，则需要刷新插件）
-pnpm preview
+pnpm dev
 
 # 查看UI
 pnpm dev:web
