@@ -1,4 +1,4 @@
-import { Button, message, Space } from 'antd';
+import { Button, Checkbox, message, Space } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import ObjectBlock from '@/components/ObjectBlock';
 import {
@@ -12,9 +12,10 @@ import { copyToClipboard } from '@/utils';
 import { generateAcrossDeviceUrl } from '@/data';
 import SimpleTabs from '@/common/SimpleTabs';
 import { useInitPopup } from '@/hooks';
-import { SettingOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import Dynamic from '@/common/Dynamic';
 import { en_US, Locale, LocaleProvider, useLocale, zh_CN } from '@/locales';
+import Tooltip from 'antd/es/tooltip';
 
 const INIT_STORE: IStore = { localStorage: {}, sessionStorage: {}, cookie: {} };
 
@@ -86,7 +87,6 @@ export default function () {
       const iife =
         // 清空cookie
         '(() => {' +
-        // 跳转页面
         `window.location.href = "${_location.href || ''}";` +
         // // 清空cookie
         // '(function () {' +
@@ -95,7 +95,7 @@ export default function () {
         // 'document.cookie = key + "=0;expires=" + new Date(0).toUTCString();' +
         // '})' +
         // '})();' +
-        // 替换localStorage
+        // 当前替换localStorage
         `const o = ${JSON.stringify(_localStorage || {})};` +
         'localStorage.clear();' +
         'for (const k in o) {localStorage[k]=o[k]};' +
@@ -174,6 +174,19 @@ export default function () {
           <Space>
             {/*<Button onClick={genAcrossDeviceUrl}>复制跨设备链接</Button>*/}
             <Button onClick={genIIFE}>{locale.COPY_IIFE}</Button>
+            <Tooltip
+              overlayInnerStyle={{ width: 380, padding: '12px 16px' }}
+              title={
+                <Space direction='vertical'>
+                  <div>IIFE 注意事项：</div>
+                  <div>* 复制到同源页面控制台执行时立即生效（推荐）</div>
+                  <div>* 新标签页面控制台执行（需执行2次以覆盖本地数据）</div>
+                  <div>* 禁止在其他页面执行（会覆盖其他页面本地数据）</div>
+                </Space>
+              }
+            >
+              <QuestionCircleOutlined style={{ cursor: 'pointer', color: '#c0c0c0' }} />
+            </Tooltip>
           </Space>
 
           <Space size={12}>
