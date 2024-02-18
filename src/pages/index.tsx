@@ -35,8 +35,9 @@ export default function () {
   // 切换暂存用户
   function switchCache() {
     setPage(local);
+    // 仅仅替换localStorage
     mainLocalStorage.replace(local.localStorage);
-    mainSessionStorage.replace(local.sessionStorage);
+    // mainSessionStorage.replace(local.sessionStorage);
   }
 
   // 保存到暂存用户
@@ -73,41 +74,46 @@ export default function () {
     Promise.all([
       mainLocalStorage.getCurrent(),
       mainSessionStorage.getCurrent(),
-      mainCookie.getCurrent(),
+      // mainCookie.getCurrent(),
       mainLocation.get(),
     ]).then((res) => {
-      const [_localStorage, _sessionStorage, _cookie, _location] = res.map((x) => x?.data || {});
+      const [
+        _localStorage,
+        _sessionStorage,
+        // _cookie,
+        _location,
+      ] = res.map((x) => x?.data || {});
       const iife =
         // 清空cookie
         '(() => {' +
         // 跳转页面
         `window.location.href = "${_location.href || ''}";` +
-        // 清空cookie
-        '(function () {' +
-        'const keys = document.cookie.match(/[^ =;]+(?==)/g) || [];' +
-        'keys.forEach(key => {' +
-        'document.cookie = key + "=0;expires=" + new Date(0).toUTCString();' +
-        '})' +
-        '})();' +
+        // // 清空cookie
+        // '(function () {' +
+        // 'const keys = document.cookie.match(/[^ =;]+(?==)/g) || [];' +
+        // 'keys.forEach(key => {' +
+        // 'document.cookie = key + "=0;expires=" + new Date(0).toUTCString();' +
+        // '})' +
+        // '})();' +
         // 替换localStorage
         `const o = ${JSON.stringify(_localStorage || {})};` +
         'localStorage.clear();' +
         'for (const k in o) {localStorage[k]=o[k]};' +
-        // 替换sessionStorage
-        `const s = ${JSON.stringify(_sessionStorage)};` +
-        'sessionStorage.clear();' +
-        'for (const k in s) {sessionStorage[k]=s[k]};' +
-        // 替换cookie
-        `const cookies = ${JSON.stringify(_cookie)};` +
-        'const cookieKeys = Object.keys(cookies);' +
-        'const cookieHelper = window.cookieStore || {' +
-        'async set (cookie) {' +
-        'document.cookie= `${cookie?.name || ""}=${cookie?.value || ""}`' +
-        '},' +
-        '};' +
+        // // 替换sessionStorage
+        // `const s = ${JSON.stringify(_sessionStorage)};` +
+        // 'sessionStorage.clear();' +
+        // 'for (const k in s) {sessionStorage[k]=s[k]};' +
+        // // 替换cookie
+        // `const cookies = ${JSON.stringify(_cookie)};` +
+        // 'const cookieKeys = Object.keys(cookies);' +
+        // 'const cookieHelper = window.cookieStore || {' +
+        // 'async set (cookie) {' +
+        // 'document.cookie= `${cookie?.name || ""}=${cookie?.value || ""}`' +
+        // '},' +
+        // '};' +
         // 写入cookie
         // 'console.log("cookieKeys", cookieKeys);' +
-        'cookieKeys.map(k => cookieHelper.set(cookies[k]));' +
+        // 'cookieKeys.map(k => cookieHelper.set(cookies[k]));' +
         '})();';
       copyToClipboard(iife).then(() => {
         message.success('复制成功（粘贴到浏览器控制台运行 IIFE）', 1);
@@ -188,8 +194,8 @@ export default function () {
                 onChange={setLocalActiveKey as any}
                 options={[
                   { label: 'localStorage', value: 'localStorage' },
-                  { label: 'sessionStorage', value: 'sessionStorage' },
-                  { label: 'cookie', value: 'cookie' },
+                  // { label: 'sessionStorage', value: 'sessionStorage' },
+                  // { label: 'cookie', value: 'cookie' },
                 ]}
               />
             </Space>
