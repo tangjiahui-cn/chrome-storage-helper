@@ -10,6 +10,9 @@
 3、将 chrome-storage-helper 文件夹拖进 chrome extension 页面即可
 ```
 
+## 页面展示
+<img src='./docs/example.png' height="400"/>
+
 ## 支持功能
 
 ```
