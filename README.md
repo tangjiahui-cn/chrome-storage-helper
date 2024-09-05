@@ -11,7 +11,7 @@
 ```
 
 ## 页面展示
-<img src='./docs/example.png' height="400"/>
+<img src='./docs/1.png' height="400"/>
 
 ## 支持功能
 
