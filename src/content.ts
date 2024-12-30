@@ -23,7 +23,7 @@ contentPlugins.use(System);
 contentPlugins.use(CookieStorage);
 
 if (!__DEV__) {
-  sendPopup('', { isMount: true });
+  // sendPopup('', { isMount: true });
   chrome?.runtime?.onMessage?.addListener((request, sender, sendResponse) => {
     contentPlugins.process(request.payload).then((data) => {
       sendPopup(request.id, {
